@@ -168,20 +168,24 @@ function updateUI() {
         const days = Math.floor(hours / 24);
         const remHours = hours % 24;
 
-        totalDisplay.innerText = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:00`;
-        totalRaw.innerText = `${totalMins} min`;
-        totalDisplay.style.color = isBanFormat ? "var(--ban-color)" : "white";
-        copyBtn.innerText = isBanFormat ? "Copiar Baneo" : "Copiar /jail";
-
-        if (totalMins === 0) {
-            totalHuman.innerText = "Selecciona una infracción";
-        } else {
+        if (isBanFormat) {
+            totalDisplay.innerText = hours > 0 ? `${hours}H ${mins}M` : `${mins} MINUTOS`;
+            totalDisplay.style.color = "var(--ban-color)";
+            copyBtn.innerText = "Copiar Baneo";
+            
             let humanStr = "";
             if (days > 0) humanStr += `${days} día${days > 1 ? 's' : ''} `;
             if (remHours > 0) humanStr += `${remHours} hora${remHours > 1 ? 's' : ''} `;
             if (mins > 0) humanStr += `${mins} minuto${mins > 1 ? 's' : ''}`;
-            totalHuman.innerText = humanStr.trim();
+            totalHuman.innerText = humanStr.trim() || "0 minutos";
+        } else {
+            totalDisplay.innerText = `${totalMins} MINUTOS`;
+            totalDisplay.style.color = "white";
+            copyBtn.innerText = "Copiar /jail";
+            totalHuman.innerText = totalMins === 0 ? "Selecciona una infracción" : "Formato de Cárcel Activo";
         }
+        
+        totalRaw.innerText = `${totalMins} min`;
     }
 }
 
