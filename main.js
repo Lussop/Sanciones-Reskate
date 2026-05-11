@@ -90,7 +90,7 @@ function renderRules() {
 
     rulesList.innerHTML = filtered.map((rule, index) => {
         const isSelected = selectedRules.some(r => r.name === rule.name);
-        const timeStr = rule.time === Infinity ? 'PERMANENTE' : formatTimeLabel(rule.time);
+        const timeStr = formatTimeLabel(rule.time, rule.type);
         
         return `
             <div class="rule-card ${isSelected ? 'selected' : ''}" onclick="toggleRule('${rule.name}')">
@@ -110,10 +110,22 @@ function renderRules() {
     }).join('');
 }
 
-function formatTimeLabel(mins) {
-    if (mins < 60) return `${mins} min`;
-    if (mins < 1440) return `${mins / 60} h`;
-    return `${mins / 1440} d`;
+function formatTimeLabel(mins, type) {
+    if (mins === Infinity) return 'PERMANENTE';
+    
+    // Si es jail o es baneo pero corto, mostramos minutos si así se prefiere, 
+    // pero para bans largos o tipo ban usamos horas/días.
+    if (type === 'jail' || mins <= 240) {
+        return `${mins} min`;
+    }
+    
+    if (mins < 1440) {
+        const h = mins / 60;
+        return Number.isInteger(h) ? `${h}h` : `${h.toFixed(1)}h`;
+    }
+    
+    const d = mins / 1440;
+    return Number.isInteger(d) ? `${d}d` : `${d.toFixed(1)}d`;
 }
 
 window.toggleRule = (ruleName) => {
