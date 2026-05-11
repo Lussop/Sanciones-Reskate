@@ -112,18 +112,18 @@ function renderRules() {
 
 function formatTimeLabel(mins, type) {
     if (mins === Infinity) return 'PERMANENTE';
-    
-    // Si es jail o es baneo pero corto, mostramos minutos si así se prefiere, 
-    // pero para bans largos o tipo ban usamos horas/días.
-    if (type === 'jail' || mins <= 240) {
+
+    // Si es tipo jail, forzamos MINUTOS siempre
+    if (type === 'jail') {
         return `${mins} min`;
     }
-    
+
+    // Para baneos, usamos horas o días
     if (mins < 1440) {
         const h = mins / 60;
         return Number.isInteger(h) ? `${h}h` : `${h.toFixed(1)}h`;
     }
-    
+
     const d = mins / 1440;
     return Number.isInteger(d) ? `${d}d` : `${d.toFixed(1)}d`;
 }
