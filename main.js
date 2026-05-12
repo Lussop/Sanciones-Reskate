@@ -236,7 +236,7 @@ function setupEventListeners() {
         selectedRules.forEach(r => { totalMins += (r.time === Infinity ? 0 : r.time); });
         const reasons = selectedRules.map(r => r.name);
 
-        const textToCopy = `/jail ${userId} ${totalMins} ${reasons.join(' ')}`;
+        const textToCopy = `/jail ${userId} ${totalMins} ${reasons.join(' + ')}`;
         
         copyToClipboard(textToCopy, copyBtn);
     });
@@ -257,7 +257,7 @@ function setupEventListeners() {
         });
 
         const duracion = isPermanent ? 'Permanente' : totalHuman.innerText;
-        const razon = selectedRules.map(r => r.name).join(', ');
+        const razon = selectedRules.map(r => r.name).join(' + ');
 
         const textToCopy = `nombre: ${nombre}\nsteam: ${steam}\nEvidencia: ${evidencia}\nID: ${userId}\nDuracion: ${duracion}\nRazón de la sanción: ${razon}`;
         
