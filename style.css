@@ -278,7 +278,14 @@ h1 span {
 }
 
 .input-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 0.2rem;
 }
 
 .input-group label {
@@ -372,29 +379,35 @@ h1 span {
 }
 
 .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .primary-btn, .secondary-btn {
+    width: 100%;
     padding: 1rem;
     border-radius: 12px;
     border: none;
     cursor: pointer;
     font-weight: 700;
     transition: all 0.2s ease;
+    font-size: 1rem;
 }
 
 .primary-btn {
     background: var(--accent-primary);
-    color: white;
+    color: var(--bg-color);
+}
+
+.primary-btn.accent {
+    background: #eab308;
 }
 
 .primary-btn:hover {
-    background: #2563eb;
+    background: #facc15;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .secondary-btn {

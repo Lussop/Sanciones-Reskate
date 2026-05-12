@@ -71,9 +71,13 @@ const totalHuman = document.getElementById('total-human');
 const totalRaw = document.getElementById('total-time-raw');
 const searchInput = document.getElementById('rule-search');
 const userIdInput = document.getElementById('user-id');
+const userNameInput = document.getElementById('user-name');
+const userSteamInput = document.getElementById('user-steam');
+const userEvidenceInput = document.getElementById('user-evidence');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const clearBtn = document.getElementById('clear-btn');
 const copyBtn = document.getElementById('copy-btn');
+const copyTemplateBtn = document.getElementById('copy-template-btn');
 
 // Initialize
 function init() {
@@ -183,7 +187,6 @@ function updateUI() {
         if (isBanFormat) {
             totalDisplay.innerText = hours > 0 ? `${hours}H ${mins}M` : `${mins} MINUTOS`;
             totalDisplay.style.color = "var(--ban-color)";
-            copyBtn.innerText = "Copiar Baneo";
             
             let humanStr = "";
             if (days > 0) humanStr += `${days} día${days > 1 ? 's' : ''} `;
@@ -193,7 +196,6 @@ function updateUI() {
         } else {
             totalDisplay.innerText = `${totalMins} MINUTOS`;
             totalDisplay.style.color = "white";
-            copyBtn.innerText = "Copiar /jail";
             totalHuman.innerText = totalMins === 0 ? "Selecciona una infracción" : "Formato de Cárcel Activo";
         }
         
@@ -219,6 +221,9 @@ function setupEventListeners() {
     clearBtn.addEventListener('click', () => {
         selectedRules = [];
         userIdInput.value = '';
+        userNameInput.value = '';
+        userSteamInput.value = '';
+        userEvidenceInput.value = '';
         updateUI();
         renderRules();
     });
@@ -228,34 +233,48 @@ function setupEventListeners() {
         
         const userId = userIdInput.value || "ID";
         let totalMins = 0;
-        let isPermanent = false;
-        let reasons = [];
+        selectedRules.forEach(r => { totalMins += (r.time === Infinity ? 0 : r.time); });
+        const reasons = selectedRules.map(r => r.name);
 
+        const textToCopy = `/jail ${userId} ${totalMins} ${reasons.join(' ')}`;
+        
+        copyToClipboard(textToCopy, copyBtn);
+    });
+
+    copyTemplateBtn.addEventListener('click', () => {
+        if (selectedRules.length === 0) return;
+        
+        const userId = userIdInput.value || "ID";
+        const nombre = userNameInput.value || "No especificado";
+        const steam = userSteamInput.value || "No especificado";
+        const evidencia = userEvidenceInput.value || "No adjunta";
+        
+        let totalMins = 0;
+        let isPermanent = false;
         selectedRules.forEach(r => {
             if (r.time === Infinity) isPermanent = true;
             else totalMins += r.time;
-            reasons.push(r.name);
         });
 
-        const isBanFormat = totalMins > 240 || selectedRules.some(r => r.type === 'ban') || isPermanent;
+        const duracion = isPermanent ? 'Permanente' : totalHuman.innerText;
+        const razon = selectedRules.map(r => r.name).join(', ');
+
+        const textToCopy = `nombre: ${nombre}\nsteam: ${steam}\nEvidencia: ${evidencia}\nID: ${userId}\nDuracion: ${duracion}\nRazón de la sanción: ${razon}`;
         
-        let textToCopy = "";
-        
-        if (isBanFormat) {
-            textToCopy = `ID: ${userId}\nDuracion: ${isPermanent ? 'Permanente' : totalHuman.innerText}\nRazón de la sanción: ${reasons.join(', ')}`;
-        } else {
-            textToCopy = `/jail ${userId} ${totalMins} ${reasons.join(' ')}`;
-        }
-        
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            const originalText = copyBtn.innerText;
-            copyBtn.innerText = "¡Copiado!";
-            copyBtn.style.background = "var(--success-color)";
-            setTimeout(() => {
-                copyBtn.innerText = originalText;
-                copyBtn.style.background = "var(--accent-primary)";
-            }, 2000);
-        });
+        copyToClipboard(textToCopy, copyTemplateBtn);
+    });
+}
+
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "¡Copiado!";
+        const originalBg = btn.style.background;
+        btn.style.background = "var(--success-color)";
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = originalBg;
+        }, 2000);
     });
 }
 

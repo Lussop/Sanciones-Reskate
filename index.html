@@ -62,11 +62,27 @@
 
                     <aside class="summary-panel">
                         <div class="summary-card">
-                            <h3>Generador de Comando</h3>
+                            <h3>Generador de Reporte</h3>
+
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="user-id">ID In-Game</label>
+                                    <input type="number" id="user-id" placeholder="Ej: 12" min="1">
+                                </div>
+                                <div class="input-group">
+                                    <label for="user-name">Nombre / Nick</label>
+                                    <input type="text" id="user-name" placeholder="Ej: Zenn">
+                                </div>
+                            </div>
 
                             <div class="input-group">
-                                <label for="user-id">ID del Jugador</label>
-                                <input type="number" id="user-id" placeholder="Ej: 12" min="1">
+                                <label for="user-steam">Steam ID</label>
+                                <input type="text" id="user-steam" placeholder="Ej: 110000135a60ff8">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="user-evidence">Evidencia (Link)</label>
+                                <input type="url" id="user-evidence" placeholder="https://medal.tv/...">
                             </div>
 
                             <div class="selected-items" id="selected-items">
@@ -87,8 +103,9 @@
                             </div>
 
                             <div class="actions">
-                                <button id="clear-btn" class="secondary-btn">Limpiar</button>
                                 <button id="copy-btn" class="primary-btn">Copiar /jail</button>
+                                <button id="copy-template-btn" class="primary-btn accent">Copiar Plantilla</button>
+                                <button id="clear-btn" class="secondary-btn">Limpiar Todo</button>
                             </div>
                         </div>
                     </aside>
